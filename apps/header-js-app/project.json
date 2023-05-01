@@ -1,0 +1,83 @@
+{
+  "name": "header-js-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/header-js-app/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/header-js-app",
+        "compiler": "babel",
+        "main": "apps/header-js-app/src/main.ts",
+        "tsConfig": "apps/header-js-app/tsconfig.app.json",
+        "webpackConfig": "apps/header-js-app/webpack.config.js",
+        "assets": [
+          "apps/header-js-app/src/favicon.ico",
+          "apps/header-js-app/src/assets"
+        ],
+        "index": "apps/header-js-app/src/index.html",
+        "baseHref": "/",
+        "styles": ["apps/header-js-app/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/header-js-app/src/environments/environment.ts",
+              "with": "apps/header-js-app/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "header-js-app:build",
+        "port": 8000
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "header-js-app:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/header-js-app/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/header-js-app/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+
+    "static-server": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands"
+    }
+  }
+}
